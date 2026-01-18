@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Quiz Central 2026</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --primary-color: #2563eb; --secondary-color: #64748b; }
+        body { background-color: #f8fafc; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        
+        .sidebar { background: #fff; border-right: 1px solid #e2e8f0; height: 100vh; overflow-y: auto; position: sticky; top: 0; padding: 20px; z-index: 100; }
+        .nav-section-title { font-size: 0.7rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin: 25px 0 10px 0; }
+        
+        .filter-link { display: block; padding: 8px 12px; color: #475569; text-decoration: none; border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 0.85rem; margin-bottom: 2px; }
+        .filter-link:hover { background-color: #f1f5f9; color: var(--primary-color); }
+        .filter-link.active { background-color: var(--primary-color); color: white !important; font-weight: 600; }
+        
+        .scroll-container { max-height: 300px; overflow-y: auto; padding: 5px; border: 1px solid #f1f5f9; border-radius: 8px; }
+        .scroll-container::-webkit-scrollbar { width: 4px; }
+        .scroll-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        .featured-banner { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border-radius: 20px; padding: 35px; color: white; margin-bottom: 40px; }
+        
+        #quizSearch { border-radius: 50px; padding: 12px 25px; border: 1px solid #e2e8f0; margin-bottom: 30px; }
+
+        /* THE GRID FIX */
+        .quiz-item { display: none; margin-bottom: 24px; }
+        .card { border: none; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); transition: 0.3s; height: 100%; display: flex; flex-direction: column; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 12px 20px -5px rgba(0,0,0,0.15); }
+        .badge-custom { font-size: 0.65rem; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; font-weight: 700; width: fit-content; }
+
+        @media (max-width: 768px) { .sidebar { height: auto; position: relative; border-right: none; margin-bottom: 20px; } }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-3 col-lg-2 sidebar">
+            <h4 class="fw-bold mb-4 text-primary">BibleQuiz.ai</h4>
+            <a class="filter-link active" data-filter="all">🏠 All Quizzes</a>
+            
+            <div class="nav-section-title">Testaments</div>
+            <a class="filter-link" data-filter="ot">Old Testament</a>
+            <a class="filter-link" data-filter="nt">New Testament</a>
+
+            <div class="accordion accordion-flush mt-3" id="asideMenu">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button py-2 px-0 shadow-none bg-transparent" type="button" data-bs-toggle="collapse" data-bs-target="#booksCol">📚 66 Books</button>
+                    </h2>
+                    <div id="booksCol" class="accordion-collapse collapse show">
+                        <div class="scroll-container">
+                            <small class="text-muted fw-bold d-block mb-1">OLD TESTAMENT</small>
+                            <a class="filter-link" data-filter="gen">Genesis</a><a class="filter-link" data-filter="exo">Exodus</a><a class="filter-link" data-filter="lev">Leviticus</a><a class="filter-link" data-filter="num">Numbers</a><a class="filter-link" data-filter="deu">Deuteronomy</a><a class="filter-link" data-filter="jos">Joshua</a><a class="filter-link" data-filter="jdg">Judges</a><a class="filter-link" data-filter="rut">Ruth</a><a class="filter-link" data-filter="1sa">1 Samuel</a><a class="filter-link" data-filter="2sa">2 Samuel</a><a class="filter-link" data-filter="1ki">1 Kings</a><a class="filter-link" data-filter="2ki">2 Kings</a><a class="filter-link" data-filter="1ch">1 Chronicles</a><a class="filter-link" data-filter="2ch">2 Chronicles</a><a class="filter-link" data-filter="ezr">Ezra</a><a class="filter-link" data-filter="neh">Nehemiah</a><a class="filter-link" data-filter="est">Esther</a><a class="filter-link" data-filter="job">Job</a><a class="filter-link" data-filter="psa">Psalms</a><a class="filter-link" data-filter="pro">Proverbs</a><a class="filter-link" data-filter="ecc">Ecclesiastes</a><a class="filter-link" data-filter="sng">Song of Solomon</a><a class="filter-link" data-filter="isa">Isaiah</a><a class="filter-link" data-filter="jer">Jeremiah</a><a class="filter-link" data-filter="lam">Lamentations</a><a class="filter-link" data-filter="eze">Ezekiel</a><a class="filter-link" data-filter="dan">Daniel</a><a class="filter-link" data-filter="hos">Hosea</a><a class="filter-link" data-filter="joe">Joel</a><a class="filter-link" data-filter="amo">Amos</a><a class="filter-link" data-filter="oba">Obadiah</a><a class="filter-link" data-filter="jon">Jonah</a><a class="filter-link" data-filter="mic">Micah</a><a class="filter-link" data-filter="nah">Nahum</a><a class="filter-link" data-filter="hab">Habakkuk</a><a class="filter-link" data-filter="zep">Zephaniah</a><a class="filter-link" data-filter="hag">Haggai</a><a class="filter-link" data-filter="zec">Zechariah</a><a class="filter-link" data-filter="mal">Malachi</a>
+                            <small class="text-muted fw-bold d-block mt-3 mb-1">NEW TESTAMENT</small>
+                            <a class="filter-link" data-filter="mat">Matthew</a><a class="filter-link" data-filter="mrk">Mark</a><a class="filter-link" data-filter="luk">Luke</a><a class="filter-link" data-filter="jhn">John</a><a class="filter-link" data-filter="act">Acts</a><a class="filter-link" data-filter="rom">Romans</a><a class="filter-link" data-filter="1co">1 Corinthians</a><a class="filter-link" data-filter="2co">2 Corinthians</a><a class="filter-link" data-filter="gal">Galatians</a><a class="filter-link" data-filter="eph">Ephesians</a><a class="filter-link" data-filter="php">Philippians</a><a class="filter-link" data-filter="col">Colossians</a><a class="filter-link" data-filter="1th">1 Thessalonians</a><a class="filter-link" data-filter="2th">2 Thessalonians</a><a class="filter-link" data-filter="1ti">1 Timothy</a><a class="filter-link" data-filter="2ti">2 Timothy</a><a class="filter-link" data-filter="tit">Titus</a><a class="filter-link" data-filter="phm">Philemon</a><a class="filter-link" data-filter="heb">Hebrews</a><a class="filter-link" data-filter="jas">James</a><a class="filter-link" data-filter="1pe">1 Peter</a><a class="filter-link" data-filter="2pe">2 Peter</a><a class="filter-link" data-filter="1jn">1 John</a><a class="filter-link" data-filter="2jn">2 John</a><a class="filter-link" data-filter="3jn">3 John</a><a class="filter-link" data-filter="jud">Jude</a><a class="filter-link" data-filter="rev">Revelation</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed py-2 px-0 shadow-none bg-transparent" type="button" data-bs-toggle="collapse" data-bs-target="#themeCol">🔥 Events & Themes</button>
+                    </h2>
+                    <div id="themeCol" class="accordion-collapse collapse">
+                        <div class="scroll-container">
+                            <a class="filter-link" data-filter="creation">Creation</a>
+                            <a class="filter-link" data-filter="miracles">Miracles</a>
+                            <a class="filter-link" data-filter="exodus">The Exodus</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-section-title">Difficulty</div>
+            <a class="filter-link" data-filter="easy">🟢 Easy</a>
+            <a class="filter-link" data-filter="med">🟡 Medium</a>
+            <a class="filter-link" data-filter="hard">🔴 Hard</a>
+
+            <div class="nav-section-title">Audience</div>
+            <a class="filter-link" data-filter="kids">🎈 Kids</a>
+            <a class="filter-link" data-filter="teens">🛹 Teens</a>
+            <a class="filter-link" data-filter="adults">🎓 Adults</a>
+        </nav>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+            
+            <div class="featured-banner">
+                <h2 class="fw-bold mb-1">Bible Master Class 2026</h2>
+                <p class="opacity-75 mb-3">Our most comprehensive study quiz updated for the new year.</p>
+                <button class="btn btn-light rounded-pill fw-bold px-4" data-bs-toggle="modal" data-bs-target="#qMdl" data-url="#">Start Now</button>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="fw-bold m-0">Explore Quizzes</h3>
+                <span class="badge bg-white text-primary border" id="quizCount"></span>
+            </div>
+            
+            <input type="text" id="quizSearch" class="form-control" placeholder="Search by book, character, or topic...">
+
+            <div class="row" id="quizContainer">
+                </div>
+
+            <div class="text-center my-5">
+                <button id="loadMore" class="btn btn-primary px-5 rounded-pill fw-bold shadow">View More Quizzes</button>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div class="modal fade" id="qMdl" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content border-0"><div class="modal-body p-0" style="height: 85vh;"><iframe id="qFrm" src="" width="100%" height="100%" frameborder="0"></iframe></div></div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// Replace with your Sheet ID
+const SHEET_ID = '1zoTzGLv-urYt2TwpQbnUpYHY7Cy18pvjObQqmg4o2r4'; 
+const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+
+let activeFilter = 'all';
+let currentLimit = 6;
+let increment = 6;
+
+async function fetchData() {
+    const container = document.getElementById('quizContainer');
+    container.innerHTML = `
+        <div class="col-12 text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-muted">Connecting to Scripture Database...</p>
+        </div>`;
+
+    try {
+        const resp = await fetch(API_URL);
+        if (!resp.ok) throw new Error(`HTTP status ${resp.status}`);
+        
+        const text = await resp.text();
+        
+        // Clean the Google Wrapper
+        const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
+        const rows = json.table.rows;
+
+        if (rows && rows.length > 0) {
+            renderCards(rows);
+        } else {
+            container.innerHTML = '<div class="col-12 text-center py-5"><h3>Sheet is empty.</h3><p>Add data starting at Row 2.</p></div>';
+        }
+    } catch (e) {
+        console.error("Detailed Error:", e);
+        container.innerHTML = `
+            <div class="col-12 text-center py-5 text-danger">
+                <h3 class="fw-bold">Connection Issue</h3>
+                <p>${e.message}</p>
+                <div class="alert alert-light border mt-3 d-inline-block text-start small">
+                    Make sure your Sheet is <b>Published to Web</b> (File > Share > Publish to web).
+                </div>
+            </div>`;
+    }
+}
+
+function renderCards(rows) {
+    let html = '';
+    
+    rows.forEach((r) => {
+        if (!r.c || !r.c[0]) return; // Skip empty rows
+
+        // Column Mapping: A=0(Title), B=1(Desc), C=2(Link), D=3(Diff), E=4(Aud), F=5(Tags)
+        const title = r.c[0] ? r.c[0].v : 'Untitled';
+        const desc  = r.c[1] ? r.c[1].v : '';
+        const url   = r.c[2] ? r.c[2].v : '#';
+        const diff  = (r.c[3] ? r.c[3].v : 'easy').toLowerCase();
+        const aud   = (r.c[4] ? r.c[4].v : '').toLowerCase();
+        const tags  = (r.c[5] ? r.c[5].v : '').toLowerCase().replace(/[^a-z0-9 ]/g, ' ');
+
+        let badgeColor = diff === 'hard' ? 'bg-danger' : (diff === 'med' || diff === 'medium' ? 'bg-warning text-dark' : 'bg-success');
+
+        // Added "all" to class list so it shows by default
+        html += `
+            <div class="col-md-6 col-lg-4 quiz-item all ${tags} ${diff} ${aud}">
+                <div class="card p-4 mb-4">
+                    <button class="badge ${badgeColor} mb-3 badge-custom border-0" 
+                            style="width:fit-content" 
+                            onclick="triggerFilter('${diff}')">
+                        ${diff.toUpperCase()}
+                    </button>
+                    <h5 class="fw-bold">${title}</h5>
+                    <p class="text-muted small">${desc}</p>
+                    <div class="mt-auto">
+                        <button class="btn btn-outline-primary w-100 rounded-pill fw-bold" 
+                                data-bs-toggle="modal" data-bs-target="#qMdl" data-url="${url}">
+                            Start Quiz
+                        </button>
+                    </div>
+                </div>
+            </div>`;
+    });
+
+    document.getElementById('quizContainer').innerHTML = html;
+    applyFilters();
+}
+
+// Click-to-Filter Badge Logic
+function triggerFilter(tag) {
+    const filterBtn = document.querySelector(`.filter-link[data-filter="${tag}"]`);
+    if (filterBtn) filterBtn.click();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function applyFilters() {
+    const searchVal = document.getElementById('quizSearch').value.toLowerCase();
+    let visibleCount = 0;
+    let totalMatch = 0;
+
+    const items = document.querySelectorAll('.quiz-item');
+    items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        const hasFilter = activeFilter === 'all' || item.classList.contains(activeFilter);
+        const hasSearch = text.includes(searchVal);
+
+        if (hasFilter && hasSearch) {
+            totalMatch++;
+            if (visibleCount < currentLimit) {
+                item.style.display = 'block';
+                visibleCount++;
+            } else {
+                item.style.display = 'none';
+            }
+        } else {
+            item.style.display = 'none';
+        }
+    });
+
+    const countLabel = document.getElementById('quizCount');
+    if(countLabel) countLabel.innerText = `${totalMatch} Quizzes Found`;
+    
+    document.getElementById('loadMore').style.display = (totalMatch > currentLimit) ? 'inline-block' : 'none';
+}
+
+// Sidebar Filter Click
+document.querySelectorAll('.filter-link').forEach(link => {
+    link.addEventListener('click', function() {
+        document.querySelectorAll('.filter-link').forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+        activeFilter = this.getAttribute('data-filter');
+        currentLimit = 6; 
+        applyFilters();
+    });
+});
+
+// Search and Load More Listeners
+document.getElementById('quizSearch').addEventListener('keyup', () => {
+    currentLimit = 6;
+    applyFilters();
+});
+
+document.getElementById('loadMore').addEventListener('click', () => {
+    currentLimit += increment;
+    applyFilters();
+});
+
+// Modal iframe handling
+const quizModal = document.getElementById('qMdl');
+if (quizModal) {
+    quizModal.addEventListener('show.bs.modal', (e) => {
+        const url = e.relatedTarget.getAttribute('data-url');
+        document.getElementById('qFrm').src = url;
+    });
+    quizModal.addEventListener('hidden.bs.modal', () => {
+        document.getElementById('qFrm').src = '';
+    });
+}
+
+// Start
+fetchData();
+</script>
+</body>
+</html>
