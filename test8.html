@@ -123,7 +123,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-// Replace with your Sheet ID
 const SHEET_ID = '1zoTzGLv-urYt2TwpQbnUpYHY7Cy18pvjObQqmg4o2r4'; 
 const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 
@@ -142,54 +141,43 @@ async function fetchData() {
     try {
         const resp = await fetch(API_URL);
         if (!resp.ok) throw new Error(`HTTP status ${resp.status}`);
-        
         const text = await resp.text();
-        
-        // Clean the Google Wrapper
         const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
         const rows = json.table.rows;
 
         if (rows && rows.length > 0) {
             renderCards(rows);
         } else {
-            container.innerHTML = '<div class="col-12 text-center py-5"><h3>Sheet is empty.</h3><p>Add data starting at Row 2.</p></div>';
+            container.innerHTML = '<div class="col-12 text-center py-5"><h3>Sheet is empty.</h3></div>';
         }
     } catch (e) {
-        console.error("Detailed Error:", e);
-        container.innerHTML = `
-            <div class="col-12 text-center py-5 text-danger">
-                <h3 class="fw-bold">Connection Issue</h3>
-                <p>${e.message}</p>
-                <div class="alert alert-light border mt-3 d-inline-block text-start small">
-                    Make sure your Sheet is <b>Published to Web</b> (File > Share > Publish to web).
-                </div>
-            </div>`;
+        console.error("Error:", e);
+        container.innerHTML = `<div class="col-12 text-center py-5 text-danger"><h3>Connection Issue</h3><p>${e.message}</p></div>`;
     }
 }
 
 function renderCards(rows) {
     let html = '';
-    
-    rows.forEach((r) => {
-        if (!r.c || !r.c[0]) return; // Skip empty rows
+    rows.forEach((r, index) => {
+        if (index === 0) return; // Skip Header Row
+        if (!r.c || !r.c[0]) return; 
 
-        // Column Mapping: A=0(Title), B=1(Desc), C=2(Link), D=3(Diff), E=4(Aud), F=5(Tags)
         const title = r.c[0] ? r.c[0].v : 'Untitled';
         const desc  = r.c[1] ? r.c[1].v : '';
         const url   = r.c[2] ? r.c[2].v : '#';
-        const diff  = (r.c[3] ? r.c[3].v : 'easy').toLowerCase();
+        const diff  = (r.c[3] ? r.c[3].v : 'easy').toLowerCase().trim();
         const aud   = (r.c[4] ? r.c[4].v : '').toLowerCase();
         const tags  = (r.c[5] ? r.c[5].v : '').toLowerCase().replace(/[^a-z0-9 ]/g, ' ');
 
-        let badgeColor = diff === 'hard' ? 'bg-danger' : (diff === 'med' || diff === 'medium' ? 'bg-warning text-dark' : 'bg-success');
+        let badgeColor = 'bg-success';
+        if (diff.includes('hard')) badgeColor = 'bg-danger';
+        if (diff.includes('med')) badgeColor = 'bg-warning text-dark';
 
-        // Added "all" to class list so it shows by default
         html += `
             <div class="col-md-6 col-lg-4 quiz-item all ${tags} ${diff} ${aud}">
                 <div class="card p-4 mb-4">
                     <button class="badge ${badgeColor} mb-3 badge-custom border-0" 
-                            style="width:fit-content" 
-                            onclick="triggerFilter('${diff}')">
+                            style="width:fit-content" onclick="triggerFilter('${diff}')">
                         ${diff.toUpperCase()}
                     </button>
                     <h5 class="fw-bold">${title}</h5>
@@ -203,12 +191,10 @@ function renderCards(rows) {
                 </div>
             </div>`;
     });
-
     document.getElementById('quizContainer').innerHTML = html;
     applyFilters();
 }
 
-// Click-to-Filter Badge Logic
 function triggerFilter(tag) {
     const filterBtn = document.querySelector(`.filter-link[data-filter="${tag}"]`);
     if (filterBtn) filterBtn.click();
@@ -219,8 +205,8 @@ function applyFilters() {
     const searchVal = document.getElementById('quizSearch').value.toLowerCase();
     let visibleCount = 0;
     let totalMatch = 0;
-
     const items = document.querySelectorAll('.quiz-item');
+
     items.forEach(item => {
         const text = item.textContent.toLowerCase();
         const hasFilter = activeFilter === 'all' || item.classList.contains(activeFilter);
@@ -241,11 +227,9 @@ function applyFilters() {
 
     const countLabel = document.getElementById('quizCount');
     if(countLabel) countLabel.innerText = `${totalMatch} Quizzes Found`;
-    
     document.getElementById('loadMore').style.display = (totalMatch > currentLimit) ? 'inline-block' : 'none';
 }
 
-// Sidebar Filter Click
 document.querySelectorAll('.filter-link').forEach(link => {
     link.addEventListener('click', function() {
         document.querySelectorAll('.filter-link').forEach(l => l.classList.remove('active'));
@@ -256,7 +240,6 @@ document.querySelectorAll('.filter-link').forEach(link => {
     });
 });
 
-// Search and Load More Listeners
 document.getElementById('quizSearch').addEventListener('keyup', () => {
     currentLimit = 6;
     applyFilters();
@@ -267,7 +250,6 @@ document.getElementById('loadMore').addEventListener('click', () => {
     applyFilters();
 });
 
-// Modal iframe handling
 const quizModal = document.getElementById('qMdl');
 if (quizModal) {
     quizModal.addEventListener('show.bs.modal', (e) => {
@@ -279,7 +261,6 @@ if (quizModal) {
     });
 }
 
-// Start
 fetchData();
 </script>
 </body>
