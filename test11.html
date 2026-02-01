@@ -203,10 +203,7 @@ function renderCards(rows) {
         if (index === 0) return; // Skip Header Row
         if (!r.c || !r.c[0]) return; 
 
-        // 1. Check if the cell exists
-// 2. Use .f (formatted string like "Feb 2026") if available
-// 3. Otherwise, convert the value to a String to avoid [object Object] errors
-		const title = r.c[0] ? (r.c[0].f ? r.c[0].f : String(r.c[0].v)) : 'Untitled';
+        const title = r.c[0] ? r.c[0].v : 'Untitled';
         const desc  = r.c[1] ? r.c[1].v : '';
         const url   = r.c[2] ? r.c[2].v : '#';
         
