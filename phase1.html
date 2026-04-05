@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Quiz Central | Phase 1</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --primary-color: #2563eb; }
+        body { background-color: #f8fafc; font-family: 'Inter', sans-serif; }
+        
+        .featured-banner { 
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); 
+            border-radius: 20px; padding: 40px; color: white; margin-bottom: 30px; 
+            text-align: center;
+        }
+
+        #quizSearch { 
+            border-radius: 50px; padding: 12px 25px; 
+            border: 1px solid #e2e8f0; margin-bottom: 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        /* COMPACT CARD UI */
+        .quiz-item { margin-bottom: 20px; }
+        .card { 
+            border: none; border-radius: 16px; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
+            transition: 0.3s; height: 100%; 
+            padding: 1.25rem !important; /* Compact Padding */
+        }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+
+        .card h5.fw-bold {
+            min-height: 1.2em; line-height: 1.2em; font-size: 1.1rem;
+            display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical;
+            overflow: hidden; margin-bottom: 0.25rem;
+        }
+
+        .card p.text-muted {
+            min-height: 2.4em; line-height: 1.2em; font-size: 0.85rem;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            overflow: hidden; margin-bottom: 15px;
+        }
+
+        .badge-custom { 
+            font-size: 0.6rem; padding: 3px 10px; border-radius: 6px; 
+            text-transform: uppercase; font-weight: 700; margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="featured-banner">
+                <h1 class="fw-bold">Bible Quiz Hub</h1>
+                <p class="opacity-75">Interactive Scripture Study for Sunday Schools</p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <input type="text" id="quizSearch" class="form-control" placeholder="Search quizzes (e.g. Genesis, Kids, Hard)...">
+                </div>
+            </div>
+
+            <div class="row g-4" id="quizContainer">
+                </div>
+
+            <div class="text-center my-5">
+                <button id="loadMore" class="btn btn-primary px-5 rounded-pill fw-bold shadow">View More Quizzes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="qMdl" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content border-0"><div class="modal-body p-0" style="height: 85vh;"><iframe id="qFrm" src="" width="100%" height="100%" frameborder="0"></iframe></div></div>
+    </div>
+</div>
+
+<script>
+const SHEET_ID = '1zoTzGLv-urYt2TwpQbnUpYHY7Cy18pvjObQqmg4o2r4'; 
+const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+
+let currentLimit = 9;
+let increment = 6;
+
+async function fetchData() {
+    const container = document.getElementById('quizContainer');
+    try {
+        const resp = await fetch(API_URL);
+        const text = await resp.text();
+        const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
+        renderCards(json.table.rows);
+    } catch (e) {
+        container.innerHTML = `<div class="text-center py-5 text-danger">Connection Issue: ${e.message}</div>`;
+    }
+}
+
+function renderCards(rows) {
+    let html = '';
+    rows.forEach((r, index) => {
+        if (index === 0 || !r.c || !r.c[0]) return; 
+
+        // Fix: Use .f (formatted text) to avoid Date(2026,0,1) errors
+        const title = r.c[0] ? (r.c[0].f ? r.c[0].f : r.c[0].v) : 'Untitled';
+        const desc  = r.c[1] ? r.c[1].v : '';
+        const url   = r.c[2] ? r.c[2].v : '#';
+        const rawDiff = (r.c[3] ? r.c[3].v : 'easy').toLowerCase();
+
+        let bCls = 'bg-success';
+        if (rawDiff === 'hard') bCls = 'bg-danger';
+        if (rawDiff.includes('med')) bCls = 'bg-warning text-dark';
+
+        html += `
+            <div class="col-sm-6 col-lg-4 quiz-item">
+                <div class="card p-3">
+                    <span class="badge ${bCls} badge-custom w-auto d-inline-block">${rawDiff}</span>
+                    <h5 class="fw-bold">${title}</h5>
+                    <p class="text-muted small">${desc}</p>
+                    <div class="mt-auto">
+                        <button class="btn btn-outline-primary w-100 rounded-pill fw-bold" 
+                                data-bs-toggle="modal" data-bs-target="#qMdl" data-url="${url}">
+                            Start Quiz
+                        </button>
+                    </div>
+                </div>
+            </div>`;
+    });
+    document.getElementById('quizContainer').innerHTML = html;
+    applySearch();
+}
+
+function applySearch() {
+    const val = document.getElementById('quizSearch').value.toLowerCase();
+    const items = document.querySelectorAll('.quiz-item');
+    let shown = 0;
+
+    items.forEach(item => {
+        const match = item.textContent.toLowerCase().includes(val);
+        if (match && shown < currentLimit) {
+            item.style.display = 'block';
+            shown++;
+        } else {
+            item.style.display = 'none';
+        }
+    });
+
+    document.getElementById('loadMore').style.display = (items.length > currentLimit) ? 'inline-block' : 'none';
+}
+
+document.getElementById('quizSearch').addEventListener('keyup', () => { currentLimit = 9; applySearch(); });
+document.getElementById('loadMore').addEventListener('click', () => { currentLimit += increment; applySearch(); });
+
+// Modal logic
+document.getElementById('qMdl').addEventListener('show.bs.modal', (e) => {
+    document.getElementById('qFrm').src = e.relatedTarget.getAttribute('data-url');
+});
+
+fetchData();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

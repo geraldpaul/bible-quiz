@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Quiz Platform 2026</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f0f2f5; font-family: 'Inter', sans-serif; }
+        .sidebar { background: white; border-right: 1px solid #dee2e6; height: 100vh; overflow-y: auto; padding: 20px; position: sticky; top: 0; }
+        .filter-header { font-size: 0.8rem; font-weight: bold; color: #6c757d; text-transform: uppercase; margin-top: 20px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .filter-link { display: block; padding: 5px 10px; color: #333; text-decoration: none; border-radius: 5px; cursor: pointer; transition: 0.2s; font-size: 0.95rem; }
+        .filter-link:hover { background-color: #e9ecef; color: #007bff; }
+        .filter-link.active { background-color: #007bff; color: white; }
+        .quiz-card { margin-bottom: 20px; }
+        .card { border: none; border-radius: 15px; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 12px 20px rgba(0,0,0,0.1); }
+        .iframe-container { position: relative; padding-top: 150%; }
+        .iframe-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+            <h4 class="mb-4">Bible Quizzes</h4>
+            
+            <a class="filter-link active" data-filter="*">Show All</a>
+
+            <div class="filter-header">Months 2026</div>
+            <a class="filter-link" data-filter=".jan26">January</a>
+            <a class="filter-link" data-filter=".feb26">February</a>
+            <a class="filter-link" data-filter=".mar26">March</a>
+
+            <div class="filter-header">Books</div>
+            <a class="filter-link" data-filter=".genesis">Genesis</a>
+            <a class="filter-link" data-filter=".exodus">Exodus</a>
+            <a class="filter-link" data-filter=".matthew">Matthew</a>
+
+            <div class="filter-header">Characters</div>
+            <a class="filter-link" data-filter=".david">David</a>
+            <a class="filter-link" data-filter=".moses">Moses</a>
+            <a class="filter-link" data-filter=".elijah">Elijah</a>
+
+            <div class="filter-header">Difficulty</div>
+            <a class="filter-link" data-filter=".easy">Easy</a>
+            <a class="filter-link" data-filter=".medium">Medium</a>
+            <a class="filter-link" data-filter=".hard">Hard</a>
+
+            <div class="filter-header">Events</div>
+            <a class="filter-link" data-filter=".miracles">Miracles</a>
+            <a class="filter-link" data-filter=".faith">Faith</a>
+
+            <div class="filter-header">Audience</div>
+            <a class="filter-link" data-filter=".kids">Kids</a>
+            <a class="filter-link" data-filter=".teens">Teens</a>
+            <a class="filter-link" data-filter=".adults">Adults</a>
+        </nav>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+            <div class="row grid">
+                
+                <div class="col-sm-6 col-lg-4 quiz-item jan26 genesis david hard miracles adults">
+                    <div class="card p-3">
+                        <div class="card-body">
+                            <h5 class="card-title">David the Shepherd</h5>
+                            <p class="card-text text-muted small">A hard quiz for adults focused on David's miracles.</p>
+                            <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#quizModal" data-url="YOUR_LINK_1">Start Quiz</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4 quiz-item feb26 matthew faith kids">
+                    <div class="card p-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Jesus Loves Me</h5>
+                            <p class="card-text text-muted small">Easy faith-based quiz for kids from Matthew.</p>
+                            <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#quizModal" data-url="YOUR_LINK_2">Start Quiz</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+</div>
+
+<div class="modal fade" id="quizModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content">
+    <div class="modal-header"><h5 class="modal-title">Bible Quiz</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body p-0"><div class="iframe-container"><iframe id="quizFrame" src=""></iframe></div></div>
+</div></div></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+$(function(){
+    var $grid = $('.grid').isotope({ itemSelector: '.quiz-item' });
+
+    $('.filter-link').on('click', function() {
+        var filterValue = $(this).attr('data-filter');
+        $grid.isotope({ filter: filterValue });
+        
+        // UI Visual Update
+        $('.filter-link').removeClass('active');
+        $(this).addClass('active');
+    });
+
+    var quizModal = document.getElementById('quizModal');
+    quizModal.addEventListener('show.bs.modal', function (event) {
+        document.getElementById('quizFrame').src = event.relatedTarget.getAttribute('data-url');
+    });
+});
+</script>
+</body>
+</html>

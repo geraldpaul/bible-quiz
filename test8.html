@@ -41,7 +41,7 @@
 <div class="container-fluid">
     <div class="row">
         <nav class="col-md-3 col-lg-2 sidebar">
-            <h4 class="fw-bold mb-4 text-primary">BibleQuizHub</h4>
+            <h4 class="fw-bold mb-4 text-primary">BibleQuiz.ai</h4>
             <a class="filter-link active" data-filter="all">🏠 All Quizzes</a>
             
             <div class="nav-section-title">Testaments</div>
@@ -79,7 +79,7 @@
 
             <div class="nav-section-title">Difficulty</div>
             <a class="filter-link" data-filter="easy">🟢 Easy</a>
-            <a class="filter-link" data-filter="medium">🟡 Medium</a>
+            <a class="filter-link" data-filter="med">🟡 Medium</a>
             <a class="filter-link" data-filter="hard">🔴 Hard</a>
 
             <div class="nav-section-title">Audience</div>
@@ -162,32 +162,23 @@ function renderCards(rows) {
         if (index === 0) return; // Skip Header Row
         if (!r.c || !r.c[0]) return; 
 
-        // 1. Extract and Clean Data
-        const title = r.c[0] ? (r.c[0].f ? r.c[0].f : r.c[0].v) : 'Untitled'; // Handles the 'Text' trick
+        const title = r.c[0] ? r.c[0].v : 'Untitled';
         const desc  = r.c[1] ? r.c[1].v : '';
         const url   = r.c[2] ? r.c[2].v : '#';
-        
-        // 2. Normalize Difficulty (Essential for the Medium Filter)
-        let rawDiff = (r.c[3] ? r.c[3].v : 'easy').toLowerCase().trim();
-        let finalDiff = rawDiff;
-        if (rawDiff.includes('med')) finalDiff = 'med';
-        if (rawDiff.includes('hard')) finalDiff = 'hard';
-
-        // 3. Set Badge Colors
-        let badgeColor = 'bg-success';
-        if (finalDiff === 'hard') badgeColor = 'bg-danger';
-        if (finalDiff === 'med') badgeColor = 'bg-warning text-dark';
-
+        const diff  = (r.c[3] ? r.c[3].v : 'easy').toLowerCase().trim();
         const aud   = (r.c[4] ? r.c[4].v : '').toLowerCase();
         const tags  = (r.c[5] ? r.c[5].v : '').toLowerCase().replace(/[^a-z0-9 ]/g, ' ');
 
-        // 4. Build the HTML (Ensure finalDiff is in the class list)
+        let badgeColor = 'bg-success';
+        if (diff.includes('hard')) badgeColor = 'bg-danger';
+        if (diff.includes('med')) badgeColor = 'bg-warning text-dark';
+
         html += `
-            <div class="col-md-6 col-lg-4 quiz-item all ${tags} ${finalDiff} ${aud}">
+            <div class="col-md-6 col-lg-4 quiz-item all ${tags} ${diff} ${aud}">
                 <div class="card p-4 mb-4">
                     <button class="badge ${badgeColor} mb-3 badge-custom border-0" 
-                            style="width:fit-content" onclick="triggerFilter('${finalDiff}')">
-                        ${finalDiff.toUpperCase()}
+                            style="width:fit-content" onclick="triggerFilter('${diff}')">
+                        ${diff.toUpperCase()}
                     </button>
                     <h5 class="fw-bold">${title}</h5>
                     <p class="text-muted small">${desc}</p>

@@ -34,7 +34,48 @@
         .badge-custom { font-size: 0.65rem; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; font-weight: 700; width: fit-content; }
 
         @media (max-width: 768px) { .sidebar { height: auto; position: relative; border-right: none; margin-bottom: 20px; } }
-    </style>
+    
+/* 1. Reduce the overall card padding from p-4 to p-3 (in the HTML) or here: */
+.card {
+    padding: 1.25rem !important; /* Smaller internal gap */
+}
+
+/* 2. Tighten the Title to 1 line only */
+.card h5.fw-bold {
+    min-height: 1.2em; 
+    line-height: 1.2em;
+    font-size: 1.1rem; /* Slightly smaller font */
+    margin-bottom: 0.25rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 3. Tighten the Description to 2 lines only */
+.card p.text-muted {
+    min-height: 2.4em; 
+    line-height: 1.2em;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 4. Shrink the Badge and Button */
+.badge-custom {
+    padding: 2px 8px;
+    font-size: 0.6rem;
+    margin-bottom: 8px !important;
+}
+
+.btn {
+    padding: 5px 10px;
+    font-size: 0.85rem;
+}
+	</style>
 </head>
 <body>
 
@@ -79,7 +120,7 @@
 
             <div class="nav-section-title">Difficulty</div>
             <a class="filter-link" data-filter="easy">🟢 Easy</a>
-            <a class="filter-link" data-filter="medium">🟡 Medium</a>
+            <a class="filter-link" data-filter="med">🟡 Medium</a>
             <a class="filter-link" data-filter="hard">🔴 Hard</a>
 
             <div class="nav-section-title">Audience</div>
@@ -162,32 +203,29 @@ function renderCards(rows) {
         if (index === 0) return; // Skip Header Row
         if (!r.c || !r.c[0]) return; 
 
-        // 1. Extract and Clean Data
-        const title = r.c[0] ? (r.c[0].f ? r.c[0].f : r.c[0].v) : 'Untitled'; // Handles the 'Text' trick
+        const title = r.c[0] ? r.c[0].v : 'Untitled';
         const desc  = r.c[1] ? r.c[1].v : '';
         const url   = r.c[2] ? r.c[2].v : '#';
         
-        // 2. Normalize Difficulty (Essential for the Medium Filter)
-        let rawDiff = (r.c[3] ? r.c[3].v : 'easy').toLowerCase().trim();
-        let finalDiff = rawDiff;
-        if (rawDiff.includes('med')) finalDiff = 'med';
-        if (rawDiff.includes('hard')) finalDiff = 'hard';
-
-        // 3. Set Badge Colors
-        let badgeColor = 'bg-success';
-        if (finalDiff === 'hard') badgeColor = 'bg-danger';
-        if (finalDiff === 'med') badgeColor = 'bg-warning text-dark';
+        // --- NORMALIZATION LOGIC START ---
+        const rawDiff = (r.c[3] ? r.c[3].v : 'easy').toLowerCase().trim();
+        let diff = rawDiff;
+        if (rawDiff === 'medium') diff = 'med'; // Force "medium" to match "med" filter
+        // --- NORMALIZATION LOGIC END ---
 
         const aud   = (r.c[4] ? r.c[4].v : '').toLowerCase();
         const tags  = (r.c[5] ? r.c[5].v : '').toLowerCase().replace(/[^a-z0-9 ]/g, ' ');
 
-        // 4. Build the HTML (Ensure finalDiff is in the class list)
+        let badgeColor = 'bg-success';
+        if (diff === 'hard') badgeColor = 'bg-danger';
+        if (diff === 'med')  badgeColor = 'bg-warning text-dark';
+
         html += `
-            <div class="col-md-6 col-lg-4 quiz-item all ${tags} ${finalDiff} ${aud}">
-                <div class="card p-4 mb-4">
+            <div class="col-md-6 col-lg-4 quiz-item all ${tags} ${diff} ${aud}">
+                <div class="card p-3 mb-4">
                     <button class="badge ${badgeColor} mb-3 badge-custom border-0" 
-                            style="width:fit-content" onclick="triggerFilter('${finalDiff}')">
-                        ${finalDiff.toUpperCase()}
+                            style="width:fit-content" onclick="triggerFilter('${diff}')">
+                        ${rawDiff.toUpperCase()}
                     </button>
                     <h5 class="fw-bold">${title}</h5>
                     <p class="text-muted small">${desc}</p>

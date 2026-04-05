@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Quiz Central | 2026</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .hero { background: linear-gradient(135deg, #2c3e50, #4ca1af); color: white; padding: 40px 0; }
+        .filter-section { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-top: -30px; }
+        .quiz-card { margin-bottom: 20px; width: 350px; } /* Set width for isotope grid */
+        .card { border: none; border-radius: 12px; transition: 0.3s; height: 100%; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .badge-group .badge { margin-right: 4px; font-weight: 500; }
+        .iframe-container { position: relative; width: 100%; padding-top: 150%; }
+        .iframe-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+    </style>
+</head>
+<body>
+
+<div class="hero text-center">
+    <h1>Bible Quiz Central</h1>
+    <p>Explore the Word through 2026</p>
+</div>
+
+<div class="container mb-5">
+    <div class="filter-section">
+        <div class="row g-3">
+            <div class="col-md-2">
+                <select class="form-select filter-select" data-filter-group="month">
+                    <option value="">Any Month</option>
+                    <option value=".jan2026">Jan 2026</option>
+                    <option value=".feb2026">Feb 2026</option>
+                    <option value=".mar2026">Mar 2026</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select filter-select" data-filter-group="book">
+                    <option value="">Any Book</option>
+                    <option value=".genesis">Genesis</option>
+                    <option value=".exodus">Exodus</option>
+                    <option value=".matthew">Matthew</option>
+                    <option value=".corinthians">1 Corinthians</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select filter-select" data-filter-group="character">
+                    <option value="">Any Character</option>
+                    <option value=".david">David</option>
+                    <option value=".moses">Moses</option>
+                    <option value=".elijah">Elijah</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select filter-select" data-filter-group="difficulty">
+                    <option value="">Any Difficulty</option>
+                    <option value=".easy">Easy</option>
+                    <option value=".medium">Medium</option>
+                    <option value=".hard">Hard</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select filter-select" data-filter-group="event">
+                    <option value="">Any Theme</option>
+                    <option value=".miracles">Miracles</option>
+                    <option value=".prophecies">Prophecies</option>
+                    <option value=".faith">Faith</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select filter-select" data-filter-group="audience">
+                    <option value="">Any Audience</option>
+                    <option value=".kids">Kids</option>
+                    <option value=".teens">Teens</option>
+                    <option value=".adults">Adults</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row grid mt-4 justify-content-center">
+        
+        <div class="quiz-card jan2026 genesis david hard miracles adults">
+            <div class="card p-3 shadow-sm">
+                <div class="card-body">
+                    <h5 class="fw-bold">David & The Giant</h5>
+                    <p class="text-muted small">A hard challenge on David's early miracles.</p>
+                    <div class="badge-group mt-2">
+                        <span class="badge bg-dark">Jan 2026</span>
+                        <span class="badge bg-primary">Genesis</span>
+                        <span class="badge bg-danger">Hard</span>
+                        <span class="badge bg-info text-dark">Adults</span>
+                    </div>
+                    <button class="btn btn-outline-primary w-100 mt-3" data-bs-toggle="modal" data-bs-target="#quizModal" data-url="YOUR_LINK_1">Start Quiz</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz-card feb2026 matthew faith kids">
+            <div class="card p-3 shadow-sm">
+                <div class="card-body">
+                    <h5 class="fw-bold">Parables for Kids</h5>
+                    <p class="text-muted small">Simple faith lessons from Matthew.</p>
+                    <div class="badge-group mt-2">
+                        <span class="badge bg-dark">Feb 2026</span>
+                        <span class="badge bg-success">Easy</span>
+                        <span class="badge bg-info text-dark">Kids</span>
+                    </div>
+                    <button class="btn btn-outline-primary w-100 mt-3" data-bs-toggle="modal" data-bs-target="#quizModal" data-url="YOUR_LINK_2">Start Quiz</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="quizModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content">
+    <div class="modal-header"><h5 class="modal-title">Bible Quiz</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body p-0"><div class="iframe-container"><iframe id="quizFrame" src=""></iframe></div></div>
+</div></div></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+$(function(){
+    var $grid = $('.grid').isotope({ itemSelector: '.quiz-card' });
+    var filters = {};
+
+    $('.filter-select').on('change', function() {
+        var group = $(this).attr('data-filter-group');
+        filters[group] = $(this).val();
+        var filterValue = concatValues(filters);
+        $grid.isotope({ filter: filterValue });
+    });
+
+    function concatValues(obj) {
+        var value = '';
+        for (var prop in obj) { value += obj[prop]; }
+        return value;
+    }
+
+    var quizModal = document.getElementById('quizModal');
+    quizModal.addEventListener('show.bs.modal', function (event) {
+        document.getElementById('quizFrame').src = event.relatedTarget.getAttribute('data-url');
+    });
+});
+</script>
+</body>
+</html>

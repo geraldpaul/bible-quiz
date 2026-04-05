@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Quiz Platform 2026</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Inter', sans-serif; }
+        .sidebar { background: #fff; border-right: 1px solid #dee2e6; height: 100vh; overflow-y: auto; position: sticky; top: 0; padding: 20px; }
+        
+        /* Sidebar Styling */
+        .nav-section-title { font-size: 0.75rem; font-weight: 700; color: #adb5bd; text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 10px 0; }
+        .filter-link { display: block; padding: 8px 12px; color: #495057; text-decoration: none; border-radius: 6px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; margin-bottom: 2px; }
+        .filter-link:hover { background-color: #f1f3f5; color: #007bff; }
+        .filter-link.active { background-color: #007bff; color: white !important; }
+        
+        /* Accordion Customization */
+        .accordion-button:not(.collapsed) { background-color: #e7f1ff; color: #007bff; }
+        .accordion-button { font-size: 0.9rem; padding: 10px 15px; }
+        .accordion-body { padding: 5px 0 10px 15px; }
+
+        .quiz-item { margin-bottom: 20px; }
+        .card { border: none; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-3 col-lg-2 sidebar">
+            <h5 class="fw-bold mb-4 text-primary">Bible Quiz 2026</h5>
+            
+            <a class="filter-link active" data-filter="*">🏠 All Quizzes</a>
+            
+            <div class="nav-section-title">Major Divisions</div>
+            <a class="filter-link text-primary fw-bold" data-filter=".ot">Old Testament</a>
+            <a class="filter-link text-success fw-bold" data-filter=".nt">New Testament</a>
+
+            <div class="nav-section-title">Explore by...</div>
+            <div class="accordion accordion-flush" id="filterAccordion">
+                
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBooks">Books</button>
+                    </h2>
+                    <div id="collapseBooks" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
+                        <div class="accordion-body">
+                            <a class="filter-link" data-filter=".genesis">Genesis</a>
+                            <a class="filter-link" data-filter=".exodus">Exodus</a>
+                            <a class="filter-link" data-filter=".matthew">Matthew</a>
+                            <a class="filter-link" data-filter=".corinthians">1 Corinthians</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseChars">Characters</button>
+                    </h2>
+                    <div id="collapseChars" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
+                        <div class="accordion-body">
+                            <a class="filter-link" data-filter=".david">David</a>
+                            <a class="filter-link" data-filter=".moses">Moses</a>
+                            <a class="filter-link" data-filter=".elijah">Elijah</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEvents">Events</button>
+                    </h2>
+                    <div id="collapseEvents" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
+                        <div class="accordion-body">
+                            <a class="filter-link" data-filter=".miracles">Miracles</a>
+                            <a class="filter-link" data-filter=".prophecies">Prophecies</a>
+                            <a class="filter-link" data-filter=".blessings">Blessings</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMonths">Months (2026)</button>
+                    </h2>
+                    <div id="collapseMonths" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
+                        <div class="accordion-body">
+                            <a class="filter-link" data-filter=".jan26">January 2026</a>
+                            <a class="filter-link" data-filter=".feb26">February 2026</a>
+                            <a class="filter-link" data-filter=".mar26">March 2026</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <div class="nav-section-title">Audience</div>
+            <a class="filter-link" data-filter=".kids">Kids</a>
+            <a class="filter-link" data-filter=".teens">Teens</a>
+            <a class="filter-link" data-filter=".adults">Adults</a>
+        </nav>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+            <div class="row grid">
+                <div class="col-md-4 quiz-item ot genesis david miracles jan26 adults">
+                    <div class="card h-100 p-3">
+                        <div class="card-body">
+                            <span class="badge bg-light text-dark mb-2 border">Old Testament</span>
+                            <h5 class="card-title fw-bold">David & Goliath</h5>
+                            <p class="small text-muted">A Miracle in the Valley of Elah.</p>
+                            <button class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#qModal" data-url="YOUR_G_FORM_LINK">Take Quiz</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div class="modal fade" id="qModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content">
+    <div class="modal-body p-0" style="height: 80vh;"><iframe id="qFrame" src="" width="100%" height="100%" frameborder="0"></iframe></div>
+</div></div></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+$(function(){
+    var $grid = $('.grid').isotope({ itemSelector: '.quiz-item' });
+    $('.filter-link').on('click', function() {
+        var f = $(this).attr('data-filter');
+        $grid.isotope({ filter: f });
+        $('.filter-link').removeClass('active');
+        $(this).addClass('active');
+    });
+    $('#qModal').on('show.bs.modal', function(e){
+        $('#qFrame').attr('src', $(e.relatedTarget).data('url'));
+    });
+});
+</script>
+</body>
+</html>
